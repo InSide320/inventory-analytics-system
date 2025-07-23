@@ -1,0 +1,33 @@
+include header
+
+.container
+
+    h1 Hi, #{username}
+    h2 Dashboard
+    p Ви увійшли в систему.
+    div
+        a(href="/auth/logout") Вийти
+    div
+        table(style= "width: 100%;")
+            tr
+                th №
+                th username
+                th email
+                th role
+                th createdAt
+            each item, index in users
+                tr
+                    td.bg-purple-50 #{index + 1}
+                    td.bg-purple-50= item.username
+                    td.bg-purple-50= item.email
+                    if item.email !== email
+                        td.bg-purple-50
+                            form(method="POST" action=`/admin-dashboard/users/${item._id}/update-role`)
+                                select(name="role" onchange="this.form.submit()")
+                                    option(value="admin", selected=item.role === 'admin') Admin
+                                    option(value="staff", selected=item.role === 'staff') Staff
+                                    option(value="manager", selected=item.role === 'manager') Manager
+                                    option(value="viewer", selected=item.role === 'viewer') Viewer
+                    else
+                        td.bg-purple-50= item.role
+                    td.bg-purple-50= item.createdAtFormatted

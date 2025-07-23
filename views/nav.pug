@@ -1,0 +1,20 @@
+nav
+    ul(style="display:flex; justify-content: space-between; list-style-type:none")
+        li
+            a(href="/") Main
+        if(role)
+            li
+                a(href="/products") Products
+        if(role === 'admin')
+            li
+                a(href="/admin-dashboard") Admin Dashboard
+        li
+            if (username)
+                a(href="/auth/logout") Logout
+            else
+                a(href="/auth/login") Login
+        li
+            if (!username)
+                a(href="/auth/registration") Register
+        if (username)
+            li= email

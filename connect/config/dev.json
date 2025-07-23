@@ -1,0 +1,10 @@
+{
+  "port": 3100,
+  "mongoUrl": "mongodb://localhost:27017/inventory_system",
+  "dbName": "inventory_system",
+  "dbSessionCollectionName": "sessions",
+  "dbUsersCollectionName": "users",
+  "dbProductsCollectionName": "products",
+  "dbInventoryOperationsCollectionName": "inventory_operations",
+  "session_key": "OUB),H~7Tz;$cm+g!Dot@%Vo"
+}
