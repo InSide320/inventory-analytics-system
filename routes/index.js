@@ -17,7 +17,7 @@ export default function () {
             byCategory[p.category].total += p.quantity;
         });
 
-        res.render('product-analytics', {
+        res.render('products/product-analytics', {
             totalValue,
             lowStock,
             byCategory,

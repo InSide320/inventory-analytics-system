@@ -10,7 +10,7 @@ export default function () {
 
     router.get('/login', (req, res) => {
         if (req.session.email) return res.redirect('/');
-        res.render('login');
+        res.render('auth/login');
     });
 
     router.post('/login', async (req, res) => {
@@ -24,12 +24,12 @@ export default function () {
             return res.redirect('/');
         }
 
-        res.render('login', {error: 'Невірний логін або пароль'});
+        res.render('auth/login', {error: 'Невірний логін або пароль'});
     });
 
     router.get('/registration', (req, res) => {
         if (req.session.email) return res.redirect('/');
-        res.render('registration');
+        res.render('auth/registration');
     });
 
     router.post('/registration', async (req, res) => {
@@ -68,7 +68,7 @@ export default function () {
 
 
     router.get('/forgot-password', (req, res) => {
-        res.render('forgot-password');
+        res.render('auth/forgot-password');
     });
 
     router.post('/forgot-password', async (req, res) => {
@@ -76,7 +76,7 @@ export default function () {
         const user = await userSchema.findOne({email});
 
         if (!user) {
-            return res.render('forgot-password', {error: 'Користувача з таким email не знайдено'});
+            return res.render('auth/forgot-password', {error: 'Користувача з таким email не знайдено'});
         }
 
 
@@ -88,11 +88,11 @@ export default function () {
             {$set: {resetToken: token, resetExpires: expires}}
         );
 
-        const resetLink = `http://localhost:${config.port}/reset-password/${token}`;
+        const resetLink = `http://localhost:${config.port}/auth/reset-password/${token}`;
 
         console.log('Відновлення пароля:', resetLink);
 
-        res.render('forgot-password', {message: 'Посилання для відновлення надіслано'});
+        res.render('auth/forgot-password', {message: 'Посилання для відновлення надіслано'});
     });
 
     router.get('/reset-password/:token', async (req, res) => {
@@ -103,10 +103,10 @@ export default function () {
         });
 
         if (!user) {
-            return res.render('reset-password', {error: 'Недійсне або прострочене посилання'});
+            return res.render('auth/reset-password', {error: 'Недійсне або прострочене посилання'});
         }
 
-        res.render('reset-password', {token});
+        res.render('auth/reset-password', {token});
     });
 
     router.post('/reset-password/:token', async (req, res) => {
@@ -119,7 +119,7 @@ export default function () {
         });
 
         if (!user) {
-            return res.render('reset-password', {error: 'Недійсне або прострочене посилання'});
+            return res.render('auth/reset-password', {error: 'Недійсне або прострочене посилання'});
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);

@@ -7,7 +7,7 @@ export default function requireRole(roles) {
         const allowedRoles = Array.isArray(roles) ? roles : [roles];
 
         if (!allowedRoles.includes(req.session.role)) {
-            return res.status(403).send('Access denied');
+            return res.status(403).render('403');
         }
 
         next();

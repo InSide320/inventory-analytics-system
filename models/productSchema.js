@@ -1,11 +1,12 @@
-import {Schema, model} from 'mongoose';
+import {model, Schema} from 'mongoose';
 import {nanoid} from 'nanoid';
-import {EProductStatus} from "../enum/productStatus.js";
+import {EProductStatus} from "../enum/EProductStatus.js";
+import {EProductCategory} from "../enum/EProductCategory.js";
 
 const productSchema = new Schema({
     name: {type: String, required: true, trim: true},
     sku: {type: String, trim: true, uppercase: true, unique: true},
-    category: {type: String, required: true, enum: ['electronics', 'clothing', 'home', 'books', 'toys']},
+    category: {type: String, required: true, enum: EProductCategory},
     price: {type: Number, min: 0, default: 0},
     quantity: {type: Number, min: [0, 'Price must be more then 0'], default: 0},
     lowStockThreshold: {type: Number, default: 5},
@@ -23,7 +24,7 @@ const productSchema = new Schema({
             message: props => `${props.value} is not a valid image URL!`
         }
     }
-}, {timestamps: true});
+}, {timestamps: true, optimisticConcurrency: true});
 
 productSchema.pre('save', function (next) {
     if (!this.sku) {

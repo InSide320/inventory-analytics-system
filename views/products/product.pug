@@ -1,0 +1,16 @@
+include ../header
+
+.container
+    if product
+        h1=  "Product: " + product.name
+        div(style="display:flex; flex-direction: column; gap: 20px;")
+            if(role && role === 'admin' || role === 'manager')
+                a(href=`/inventory/new/${product._id}` class="btn btn-primary") Операція з товаром
+            h5= `Name Product: ${product.name}`
+            h5= `SKU: ${product.sku}`
+            h5= `Quantity: ${product.quantity}`
+            h5= `Low Stock Threshold: ${product.lowStockThreshold}`
+            h5= `Price: ${product.price.toFixed(2)}`
+            h5= `Category: ${product.category}`
+            h5= `Location: ${product.location}`
+            h5= `Status: ${product.status}`

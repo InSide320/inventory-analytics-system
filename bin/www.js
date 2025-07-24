@@ -6,7 +6,7 @@ import indexRouter from '../routes/index.js';
 import authRouter from '../routes/auth.js';
 import productsRouter from '../routes/products.js';
 import adminDashboardRouter from '../routes/adminDashboard.js';
-import operationsRouter from '../routes/operations.js';
+import inventoryOperations from '../routes/inventoryOperations.js';
 
 const PORT = config.get('port');
 
@@ -25,7 +25,7 @@ const PORT = config.get('port');
         app.use("/", indexRouter());
         app.use("/auth", authRouter());
         app.use("/products", productsRouter());
-        app.use("/operations", operationsRouter());
+        app.use("/inventory", inventoryOperations());
         app.use("/admin-dashboard", adminDashboardRouter());
 
         app.use(errorRoutes);

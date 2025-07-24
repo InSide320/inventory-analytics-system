@@ -6,25 +6,30 @@ import {EUserRoles} from "../enum/EUserRoles.js";
 const router = express.Router();
 
 export default function () {
-    router.get('/', requireRole([EUserRoles.ADMIN, EUserRoles.MANAGER]), async (req, res) => {
+    router.get('/', requireRole([EUserRoles.ADMIN, EUserRoles.MANAGER, EUserRoles.STAFF]), async (req, res) => {
         const products = await Product.find();
-        res.render('products', {products});
+        res.render('products/products', {products});
     });
 
-    router.get('/new', requireRole([EUserRoles.ADMIN, EUserRoles.MANAGER]), (req, res) => {
-        res.render('new-product');
+    router.get('/new', requireRole([EUserRoles.ADMIN]), (req, res) => {
+        res.render('products/new-product');
     });
 
-
-    router.post('/', requireRole([EUserRoles.ADMIN, EUserRoles.MANAGER]), async (req, res) => {
+    router.post('/', requireRole([EUserRoles.ADMIN]), async (req, res) => {
         await Product.create(req.body);
         res.redirect('/products');
+    });
+
+    router.get('/:id', requireRole([EUserRoles.ADMIN, EUserRoles.MANAGER, EUserRoles.STAFF]), async (req, res) => {
+        const product = await Product.findById(req.params.id);
+        if (!product) return res.status(404).send('Product not found');
+        res.render('products/product', {product});
     });
 
     router.get('/:id/edit', requireRole([EUserRoles.ADMIN, EUserRoles.MANAGER]), async (req, res) => {
         const product = await Product.findById(req.params.id);
         if (!product) return res.status(404).send('Product not found');
-        res.render('new-product', {product});
+        res.render('products/new-product', {product});
     });
 
     router.post('/:id', requireRole([EUserRoles.ADMIN, EUserRoles.MANAGER]), async (req, res) => {
@@ -56,7 +61,7 @@ export default function () {
         }
     });
 
-    router.post('/:id/delete', requireRole([EUserRoles.ADMIN, EUserRoles.MANAGER]), async (req, res) => {
+    router.post('/:id/delete', requireRole([EUserRoles.ADMIN]), async (req, res) => {
         await Product.findByIdAndDelete(req.params.id);
         res.redirect('/products');
     });

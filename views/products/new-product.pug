@@ -1,0 +1,44 @@
+include ../header
+
+.container
+    h1= product ? "Edit Product" : "Add new product"
+    div
+        form(method="POST", action=product ? `/products/${product._id}` : "/products")
+            if product
+                input(type="hidden", name="_method", value="PUT")
+                a(href=`/inventory/new/${product._id}` class="btn btn-primary") Операція з товаром
+
+            label(for="name") Назва продукту
+            input(type="text", name="name", value=product ? product.name : '', required)
+
+            if(product)
+                label(for="sku") SKU
+                input(type="text", name="sku", value=product ? product.sku : '')
+
+            label(for="quantity") Кількість
+            input(type="number", name="quantity", min="0", step="1", value=product ? product.quantity : '', required)
+
+            label(for="lowStockThreshold") Поріг низького запасу
+            input(type="number", name="lowStockThreshold", min="0", step="1", value=product ? product.lowStockThreshold : '', required)
+
+            label(for="price") Ціна
+            input(type="number", name="price", step="0.01", value=product ? product.price : '', required)
+
+            label(for="category") Категорія:
+                select(name="category")
+                    option(value="electronics", selected=product && product.category === "electronics" ? true : undefined) Electronics
+                    option(value="clothing", selected=product && product.category === "clothing" ? true : undefined) Clothing
+                    option(value="books", selected=product && product.category === "books" ? true : undefined) Books
+                    option(value="toys", selected=product && product.category === "toys" ? true : undefined) Toys
+
+            label(for="location") Місце зберігання
+            input(type="text", name="location", value=product ? product.location : '')
+
+            label(for="status") Статус:
+                select(name="status")
+                    option(value="active", selected=product && product.status === "active" ? true : undefined) Активний
+                    option(value="archived", selected=product && product.status === "archived" ? true : undefined) Архівований
+                    option(value="inactive", selected=product && product.status === "inactive" ? true : undefined) Неактивний
+
+            br
+            button(type="submit")= product ? "Edit Product" : "Add new product"
