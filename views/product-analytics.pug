@@ -1,0 +1,15 @@
+include header
+
+.container
+    h1= title
+    h2 Загальна вартість складу: #{totalValue} грн
+
+    h3 Товари з низьким залишком:
+    ul
+        each item in lowStock
+            li #{item.name} — #{item.quantity} шт
+
+    h3 Категорії:
+    ul
+        each cat, key in byCategory
+            li #{key}: #{cat.count} товарів, #{cat.total} одиниць

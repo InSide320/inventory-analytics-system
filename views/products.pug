@@ -1,4 +1,29 @@
 include header
-
 .container
-    h1= title
+    a(href="/products/new") Add new product
+    if error
+        p(style="color:red")= error
+    h1 Продукти
+    table
+        thead
+            tr
+                th Назва
+                th SKU
+                th К-сть
+                th Ціна
+                th Категорія
+                th Статус
+                th Дії
+        tbody
+            each p in products
+                tr
+                    td= p.name
+                    td= p.sku
+                    td= p.quantity
+                    td= p.price.toFixed(2)
+                    td= p.category
+                    td= p.status
+                    td
+                        a(href=`/products/${p._id}/edit`) Edit
+                        form(method="POST", action=`/products/${p._id}/delete`, style="display:inline")
+                            button(type="submit") Remove

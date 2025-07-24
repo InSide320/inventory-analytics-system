@@ -1,12 +1,15 @@
-export default function requireRole(role) {
+export default function requireRole(roles) {
     return (req, res, next) => {
-        if (!req.session.email) {
+        if (!req.session?.email) {
             return res.redirect('/auth/login');
         }
 
-        if (req.session.role !== role) {
+        const allowedRoles = Array.isArray(roles) ? roles : [roles];
+
+        if (!allowedRoles.includes(req.session.role)) {
             return res.status(403).send('Access denied');
         }
+
         next();
     };
 }

@@ -1,20 +1,23 @@
 nav
     ul(style="display:flex; justify-content: space-between; list-style-type:none")
         li
-            a(href="/") Main
+            a(href="/") Analytics
         if(role)
             li
                 a(href="/products") Products
+        if(role)
+            li
+                a(href="/operations") Operations
         if(role === 'admin')
             li
                 a(href="/admin-dashboard") Admin Dashboard
         li
-            if (username)
+            if (email)
                 a(href="/auth/logout") Logout
             else
                 a(href="/auth/login") Login
         li
-            if (!username)
+            if (!email)
                 a(href="/auth/registration") Register
-        if (username)
+        if (email)
             li= email
