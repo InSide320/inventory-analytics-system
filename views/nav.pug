@@ -1,20 +1,25 @@
-nav
-    ul(style="display:flex; justify-content: space-between; list-style-type:none")
-        li
-            a(href="/") Analytics
-        if(role)
-            li
-                a(href="/products") Products
-        if(role === 'admin')
-            li
-                a(href="/admin-dashboard") Admin Dashboard
-        li
+nav.navbar.navbar-expand-lg.bg-body-tertiary
+    div.container-fluid
+        a(href="/" class="navbar-fluid") Navbar
+        button(class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation")
+            span.navbar-toggler-icon
+    div#navbarNavDropdown.collapse.navbar-collapse.w-100.justify-content-end
+        ul.navbar-nav.align-items-center
+            li.nav-item
+                a.nav-link(href="/") Analytics
+            if(role)
+                li.nav-item
+                    a.nav-link(href="/products") Products
+            if(role === 'admin')
+                li.nav-item
+                    a.nav-link(href="/admin-dashboard") Admin Dashboard
+            li.nav-item
+                if (email)
+                    a.nav-link(href="/auth/logout") Logout
+                else
+                    a.nav-link(href="/auth/login") Login
+            li.nav-item
+                if (!email)
+                    a.nav-link(href="/auth/registration") Register
             if (email)
-                a(href="/auth/logout") Logout
-            else
-                a(href="/auth/login") Login
-        li
-            if (!email)
-                a(href="/auth/registration") Register
-        if (email)
-            li= email
+                li.nav-item= email

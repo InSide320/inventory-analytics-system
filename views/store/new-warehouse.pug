@@ -1,0 +1,22 @@
+include ../header
+
+.container
+    - const isEdit = typeof warehouse !== 'undefined' && typeof warehouse._id !== 'undefined'
+
+    h1= isEdit ? "Edit Warehouse" : "Add new Warehouse"
+    div
+        if error
+            p(style="color:red")= error
+        form.d-flex.flex-column.align-items-start.gap-3(method="POST", action=isEdit ? `/warehouses/${warehouse._id}/edit` : "/warehouses/new")
+            if isEdit
+                input(type="hidden", name="_method", value="PUT")
+                input(type="hidden", name="_id", value=warehouse._id)
+
+            label.form-label(for="name") Name warehouse
+                input.form-control(type="text", name="name", value=isEdit ? warehouse.name : '', required)
+
+            label.form-label(for="location") Location warehouse
+                input.form-control(type="text", name="location", value=isEdit ? warehouse.location : '')
+
+            button.btn.btn-primary(type="submit")= isEdit ? "Edit Warehouse" : "Add new warehouse"
+

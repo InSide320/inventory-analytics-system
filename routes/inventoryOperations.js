@@ -12,7 +12,7 @@ export default function () {
         const product = await Product.findById(req.params.productId);
         if (!product) return res.status(404).send("Product not found");
 
-        res.render("inventoryOperations", {product});
+        res.render("products/inventoryOperations", {product});
     });
 
     router.post('/', requireRole([EUserRoles.ADMIN, EUserRoles.MANAGER]), async (req, res) => {
@@ -23,7 +23,7 @@ export default function () {
         if (!product) return res.status(404).send('Product not found');
 
         try {
-            let updatedFields = {};
+            // let updatedFields = {};
             switch (operationType) {
                 case ETypeOperations.RECEIVED:
                     product.quantity += Number(quantity);

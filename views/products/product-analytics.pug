@@ -1,15 +1,52 @@
 include ../header
 
 .container
-    h1= title
-    h2 Загальна вартість складу: #{totalValue} грн
+    h1 Аналітика товарів на складах
 
-    h3 Товари з низьким залишком:
-    ul
-        each item in lowStock
-            li #{item.name} — #{item.quantity} шт
+    h2 Загальна вартість товарів на складах:
+    p.fw-bold.fs-3.text-decoration-underline #{totalValue} грн
 
-    h3 Категорії:
-    ul
-        each cat, key in byCategory
-            li #{key}: #{cat.count} товарів, #{cat.total} одиниць
+    h3 Аналітика за категоріями:
+    if Object.keys(byCategory).length
+        table.table.table-striped
+            thead
+                tr
+                    th Категорія
+                    th Кількість унікальних товарів
+                    th Загальна кількість одиниць
+            tbody
+                each data, category in byCategory
+                    tr
+                        td #{category}
+                        td #{data.count}
+                        td #{data.total}
+    else
+        p Немає даних по категоріях.
+
+    h3 Аналітика по складах (залишки):
+    if Object.keys(stockByWarehouse).length
+        table.table.table-striped.table-bordered.mt-4
+            thead
+                tr
+                    th Склад
+                    th Загальна кількість товарів (шт)
+                    th Загальна вартість (грн)
+            tbody
+                each warehouse in Object.keys(stockByWarehouse)
+                    tr
+                        td #{warehouse}
+                        td #{stockByWarehouse[warehouse]}
+                        td #{valueByWarehouse[warehouse].toFixed(2)}
+    else
+        p Дані по складах відсутні.
+
+    if role && role !== "viewer"
+        h3 Товари з низьким залишком
+        if Object.keys(lowStockByWarehouse).length
+            each items, warehouse in lowStockByWarehouse
+                h4 #{warehouse}
+                ul
+                    each item in items
+                        li #{item.name} (SKU: #{item.sku}) — #{item.quantity} шт (поріг: #{item.threshold})
+        else
+            p Всі товари мають достатній залишок.

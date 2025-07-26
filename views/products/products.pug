@@ -1,35 +1,37 @@
 include ../header
 .container
     if(role && role === 'admin')
-        a(href="/products/new") Add new product
+        a.btn.btn-primary(href="/products/new") Add new product
     if error
         p(style="color:red")= error
     h1 Продукти
-    table
+    table.table.table-striped.table-bordered.mt-4
         thead
             tr
-                th Назва
+                th Name
                 th SKU
-                th К-сть
-                th Ціна
-                th Категорія
-                th Статус
+                th Count
+                th Price
+                th Category
+                th Status
+                th Location
                 if(role && role === 'admin' || role === 'manager')
                     th Дії
         tbody
-            each p in products
+            each products in groupedProducts
                 tr
                     td
-                        a(href=`/products/${p._id}`)= p.name
-                    td= p.sku
-                    td= p.quantity
-                    td= p.price.toFixed(2)
-                    td= p.category
-                    td= p.status
+                        a(href=`/products/${products.product._id}`)= products.product.name
+                    td= products.product.sku
+                    td= products.quantity
+                    td= products.product.price.toFixed(2)
+                    td= products.product.category
+                    td= products.product.status
+                    td= products.warehouse.name
                     if(role && role === 'admin' || role === 'manager')
                         td(style="display:flex; gap: 10px; align-items: center;")
-                            a(href=`/products/${p._id}/edit`) Edit
-                            a(href=`/inventory/new/${p._id}` class="btn btn-primary") Operation
+                            a.btn.btn-primary(href=`/products/${products.product._id}/edit`) Edit
+                            a(href=`/inventory/new/${products.product._id}` class="btn btn-primary") Operation
                             if(role && role === 'admin')
-                                form(method="POST", action=`/products/${p._id}/delete`, style="display:inline; margin: 0;")
-                                    button(type="submit" style="margin: 0;") Remove
+                                form(method="POST", action=`/products/${products.product._id}/delete`, style="display:inline; margin: 0;")
+                                    button(type="submit" class="btn btn-primary" style="margin: 0;") Remove

@@ -1,0 +1,33 @@
+include ../header
+
+.container
+    h1 Операція з товаром
+    form(method="POST", action="/inventory")
+        input(type="hidden", name="productId", value=product._id)
+
+        .form-group
+            label.form-label(for="operationType") Тип операції
+            select.form-select(name="operationType", required)
+                option(value="received") Надходження
+                option(value="removed") Зняття зі складу (продаж)
+                option(value="serviced") Обслуговування
+                option(value="moved") Переміщення
+                option(value="written_off") Списання
+
+        .form-group
+            label.form-label(for="quantity") Кількість
+            input.form-control(type="number", name="quantity", min="1", required)
+
+        .form-group
+            label.form-label(for="note") Примітка
+            textarea.form-control(name="note")
+
+        .form-group
+            label.form-label(for="fromLocation") Звідки (для переміщення)
+            input.form-control(type="text", name="fromLocation", value=product.location)
+
+        .form-group
+            label.form-label(for="toLocation") Куди (для переміщення)
+            input.form-control(type="text", name="toLocation")
+
+        button(type="submit" class="btn btn-primary") Виконати операцію

@@ -1,0 +1,27 @@
+include ../header
+.container
+    if(role && role === 'admin')
+        a.btn.btn-primary(href="/warehouses/new") Add New warehouse
+        if error
+            p(style="color:red")= error
+        h1 Warehouses
+        if Object.keys(warehouses).length !== 0
+            table.table.table-striped.table-bordered.mt-4
+                thead.table-dark
+                    tr
+                        th №
+                        th Name
+                        th Location
+                        th Actions
+                tbody
+                    each warehouse, index in warehouses
+                        tr
+                            td !{index + 1}
+                            td= warehouse.name
+                            td= warehouse.location
+                            td(style="display:flex; gap: 10px; align-items: center;")
+                                a.btn.btn-primary(href=`/warehouses/${warehouse._id}/edit`) Edit
+                                form(method="POST", action=`/warehouses/${warehouse._id}/delete`, style="display:inline; margin: 0;")
+                                    button(type="submit" class="btn btn-primary" style="margin: 0;") Remove
+        else
+            h5 Empty warehouses

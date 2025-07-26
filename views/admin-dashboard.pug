@@ -6,9 +6,10 @@ include header
     h2 Dashboard
     p Ви увійшли в систему.
     div
-        a(href="/auth/logout") Вийти
+    div(style="display: flex; gap: 10px;")
+        a.btn.btn-primary(href="/warehouses") Manage warehouses
     div
-        table(style= "width: 100%;")
+        table.table.table-striped.table-bordered.mt-4
             tr
                 th №
                 th username
@@ -23,7 +24,7 @@ include header
                     if item.email !== email
                         td.bg-purple-50
                             form(method="POST" action=`/admin-dashboard/users/${item._id}/update-role`)
-                                select(name="role" onchange="this.form.submit()")
+                                select.form-select(name="role" onchange="this.form.submit()")
                                     option(value="admin", selected=item.role === 'admin') Admin
                                     option(value="staff", selected=item.role === 'staff') Staff
                                     option(value="manager", selected=item.role === 'manager') Manager

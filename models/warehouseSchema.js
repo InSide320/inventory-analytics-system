@@ -1,8 +1,8 @@
-import { Schema, model } from 'mongoose';
+import {Schema, model} from 'mongoose';
 
 const warehouseSchema = new Schema({
-    name: { type: String, required: true, unique: true },
-    location: { type: String },
-}, { timestamps: true });
+    name: {type: String, required: true, unique: true, trim: true, uppercase: true},
+    location: {type: String, trim: true},
+}, {timestamps: true});
 
 export default model('Warehouse', warehouseSchema);

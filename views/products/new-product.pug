@@ -3,42 +3,47 @@ include ../header
 .container
     h1= product ? "Edit Product" : "Add new product"
     div
-        form(method="POST", action=product ? `/products/${product._id}` : "/products")
+        form.d-flex.flex-column.align-items-start(method="POST", action=product ? `/products/${product._id}` : "/products")
             if product
                 input(type="hidden", name="_method", value="PUT")
                 a(href=`/inventory/new/${product._id}` class="btn btn-primary") Операція з товаром
 
-            label(for="name") Назва продукту
-            input(type="text", name="name", value=product ? product.name : '', required)
+            label(for="name" class="form-label") Назва продукту
+            input(type="text", class="form-control" name="name", value=product ? product.name : '', required)
 
             if(product)
-                label(for="sku") SKU
-                input(type="text", name="sku", value=product ? product.sku : '')
+                label(for="sku" class="form-label") SKU
+                input(type="text", class="form-control" name="sku", value=product ? product.sku : '' disabled readonly)
 
-            label(for="quantity") Кількість
-            input(type="number", name="quantity", min="0", step="1", value=product ? product.quantity : '', required)
+            if(!product)
+                label(for="initialQuantity" class="form-label") Кількість
+                input(type="number", class="form-control" name="initialQuantity", min="0", step="1", value=product ? product.quantity : '', required)
 
-            label(for="lowStockThreshold") Поріг низького запасу
-            input(type="number", name="lowStockThreshold", min="0", step="1", value=product ? product.lowStockThreshold : '', required)
+            label(for="lowStockThreshold" class="form-label") Поріг низького запасу
+            input(type="number", class="form-control" name="lowStockThreshold", min="0", step="1", value=product ? product.lowStockThreshold : '', required)
 
-            label(for="price") Ціна
-            input(type="number", name="price", step="0.01", value=product ? product.price : '', required)
+            label(for="price" class="form-label") Ціна
+            input(type="number", class="form-control" name="price", step="0.01", value=product ? product.price : '', required)
 
-            label(for="category") Категорія:
-                select(name="category")
-                    option(value="electronics", selected=product && product.category === "electronics" ? true : undefined) Electronics
-                    option(value="clothing", selected=product && product.category === "clothing" ? true : undefined) Clothing
-                    option(value="books", selected=product && product.category === "books" ? true : undefined) Books
-                    option(value="toys", selected=product && product.category === "toys" ? true : undefined) Toys
+            div.d-flex.gap-3
+                label(for="category" class="form-label") Категорія:
+                    select(name="category" class="form-select")
+                        option(value="electronics", selected=product && product.category === "electronics" ? true : undefined) Electronics
+                        option(value="clothing", selected=product && product.category === "clothing" ? true : undefined) Clothing
+                        option(value="books", selected=product && product.category === "books" ? true : undefined) Books
+                        option(value="toys", selected=product && product.category === "toys" ? true : undefined) Toys
 
-            label(for="location") Місце зберігання
-            input(type="text", name="location", value=product ? product.location : '')
+                if !product
+                    label(for="warehouseId" class="form-label") Місце зберігання
+                        select(name="warehouseId" class="form-select")
+                            each warehouse in warehouses
+                                option(value=warehouse._id)= warehouse.name
 
-            label(for="status") Статус:
-                select(name="status")
-                    option(value="active", selected=product && product.status === "active" ? true : undefined) Активний
-                    option(value="archived", selected=product && product.status === "archived" ? true : undefined) Архівований
-                    option(value="inactive", selected=product && product.status === "inactive" ? true : undefined) Неактивний
+                label(for="status" class="form-label") Статус:
+                    select(name="status" class="form-select")
+                        option(value="active", selected=product && product.status === "active" ? true : undefined) Активний
+                        option(value="archived", selected=product && product.status === "archived" ? true : undefined) Архівований
+                        option(value="inactive", selected=product && product.status === "inactive" ? true : undefined) Неактивний
+            button(type="submit" class="btn btn-primary mb-2")= product ? "Edit Product" : "Add new product"
 
-            br
-            button(type="submit")= product ? "Edit Product" : "Add new product"
+            a.btn.btn-primary(href="/products") <-- Back to products

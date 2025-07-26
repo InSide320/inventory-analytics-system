@@ -8,9 +8,8 @@ const productSchema = new Schema({
     sku: {type: String, trim: true, uppercase: true, unique: true},
     category: {type: String, required: true, enum: EProductCategory},
     price: {type: Number, min: 0, default: 0},
-    quantity: {type: Number, min: [0, 'Price must be more then 0'], default: 0},
     lowStockThreshold: {type: Number, default: 5},
-    location: {type: String, required: true, trim: true},
+    warehouseId: {type: Schema.Types.ObjectId, ref: 'Warehouse', required: true, trim: true},
     status: {
         type: String,
         enum: EProductStatus,

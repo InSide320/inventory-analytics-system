@@ -7,12 +7,12 @@ include ../header
       p(style="color:red")= error
 
     p 
-      a(href="/auth/forgot-password") Забули пароль?
+      a.btn.btn-primary(href="/auth/forgot-password") Забули пароль?
 
     form(method="POST" action="/auth/login")
       div
-        input(type="text" name="email" placeholder="Email" required)
+        input(type="text" class="form-control mb-2" name="email" placeholder="Email" required)
       div
-        input(type="password" name="password" placeholder="Пароль" required)
+        input(type="password" class="form-control mb-2" name="password" placeholder="Пароль" required)
       div
-        button(type="submit") Увійти
+        button(type="submit" class="btn btn-primary") Увійти
