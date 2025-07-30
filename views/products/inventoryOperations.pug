@@ -40,23 +40,3 @@ include ../header
             textarea.form-control(name="note")
 
         button.btn.btn-primary(type="submit") Застосувати операцію
-script.
-    const fromSelect = document.getElementById('fromLocation');
-    const toSelect = document.getElementById('toWarehouseId');
-
-    function updateToWarehouses() {
-        const selectedFrom = fromSelect.value;
-        for (let option of toSelect.options) {
-            if (option.value === "" || option.value !== selectedFrom) {
-                option.hidden = false;
-            } else {
-                option.hidden = true;
-                if (toSelect.value === selectedFrom) {
-                    toSelect.value = "";
-                }
-            }
-        }
-    }
-
-    fromSelect.addEventListener('change', updateToWarehouses);
-    window.addEventListener('DOMContentLoaded', updateToWarehouses);
