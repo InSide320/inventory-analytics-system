@@ -21,7 +21,7 @@ include ../header
             each products in groupedProducts
                 tr
                     td
-                        a(href=`/products/${products.warehouseProductsId}`)= products.product.name
+                        a(href=`/products/${products.product._id}`)= products.product.name
                     td= products.product.sku
                     td= products.quantity
                     td= products.product.price.toFixed(2)

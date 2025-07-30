@@ -74,12 +74,14 @@ export default function () {
     });
 
     router.get('/:id', requireRole([EUserRoles.ADMIN, EUserRoles.MANAGER, EUserRoles.STAFF]), async (req, res) => {
-        const warehouseProduct = await WarehouseProduct.findById(req.params.id)
+        const warehouseProduct = await WarehouseProduct.find({productId: req.params.id})
             .populate('productId')
             .populate('warehouseId');
-        console.log(warehouseProduct)
         if (!warehouseProduct) return res.status(404).send('Product not found!');
-        res.render('products/product', {warehouseProduct: warehouseProduct});
+        res.render('products/product', {
+            product: warehouseProduct[0].productId,
+            warehouseProduct
+        });
     });
 
     router.get('/:id/edit', requireRole([EUserRoles.ADMIN, EUserRoles.MANAGER]), async (req, res) => {
