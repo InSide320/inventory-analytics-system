@@ -1,18 +1,21 @@
 include ../header
 
 .container
-    if product
-        h1=  "Product: " + product.name
+    if warehouseProduct
+        h1=  "Product: " + warehouseProduct.productId.name
         div(style="display:flex; flex-direction: column; gap: 20px;")
             if(role && role === 'admin' || role === 'manager')
-                a(href=`/inventory/new/${product._id}` class="btn btn-primary") Операція з товаром
-            h5= `Name Product: ${product.name}`
-            h5= `SKU: ${product.sku}`
-            h5= `Quantity: ${product.quantity}`
-            h5= `Low Stock Threshold: ${product.lowStockThreshold}`
-            h5= `Price: ${product.price.toFixed(2)}`
-            h5= `Category: ${product.category}`
-            h5= `Location: ${product.location}`
-            h5= `Status: ${product.status}`
-        a.btn.btn-primary(href="/products") <-- Back to products
+                a(href=`/inventory/new/${warehouseProduct.productId._id}` class="btn btn-primary") Операція з товаром
+            h5= `Name Product: ${warehouseProduct.productId.name}`
+            h5= `SKU: ${warehouseProduct.productId.sku}`
+            h5= `Quantity: ${warehouseProduct.quantity}`
+            h5= `Low Stock Threshold: ${warehouseProduct.productId.lowStockThreshold}`
+            h5= `Price: ${warehouseProduct.productId.price.toFixed(2)}`
+            h5= `Category: ${warehouseProduct.productId.category}`
+            h5= `Storage Name: ${warehouseProduct.warehouseId.name}`
+            h5= `Location: ${warehouseProduct.warehouseId.location}`
+            h5= `Status: ${warehouseProduct.productId.status}`
+    else
+        h1 Not Found Product
+    a.btn.btn-primary(href="/products") <-- Back to products
 

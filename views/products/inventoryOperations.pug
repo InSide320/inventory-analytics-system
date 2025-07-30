@@ -1,33 +1,62 @@
 include ../header
 
 .container
-    h1 Операція з товаром
-    form(method="POST", action="/inventory")
-        input(type="hidden", name="productId", value=product._id)
+    h1= `Inventory operation for ${product.name}`
+
+    if error
+        p(style="color:red")= error
+
+    form(method="POST" action=`/inventory/new/${product._id}`)
+        input(type="hidden" name="productId" value=product._id)
 
         .form-group
-            label.form-label(for="operationType") Тип операції
-            select.form-select(name="operationType", required)
+            label(for="operationType") Тип операції:
+            select.form-control(name="operationType" id="operationType" required)
                 option(value="received") Надходження
-                option(value="removed") Зняття зі складу (продаж)
-                option(value="serviced") Обслуговування
+                option(value="removed") Вилучення
                 option(value="moved") Переміщення
                 option(value="written_off") Списання
+                option(value="serviced") Обслуговування
 
         .form-group
-            label.form-label(for="quantity") Кількість
+            label(for="quantity") Кількість:
             input.form-control(type="number", name="quantity", min="1", required)
 
         .form-group
-            label.form-label(for="note") Примітка
+            label(for="fromLocation") Обрати склад:
+            select.form-control(name="fromLocation" id="fromLocation" required)
+                each wp in warehouseProducts
+                    option(value=wp.warehouseId._id)= `${wp.warehouseId.name} (залишок: ${wp.quantity})`
+
+        .form-group#group-toWarehouseId
+            label(for="toWarehouseId") Перемістити на (для "Переміщення"):
+            select.form-control(name="toWarehouseId" id="toWarehouseId")
+                option(value="") -- Оберіть склад --
+                each w in warehouses
+                    option(value=w._id)= w.name
+
+        .form-group
+            label(for="note") Примітка:
             textarea.form-control(name="note")
 
-        .form-group
-            label.form-label(for="fromLocation") Звідки (для переміщення)
-            input.form-control(type="text", name="fromLocation", value=product.location)
+        button.btn.btn-primary(type="submit") Застосувати операцію
+script.
+    const fromSelect = document.getElementById('fromLocation');
+    const toSelect = document.getElementById('toWarehouseId');
 
-        .form-group
-            label.form-label(for="toLocation") Куди (для переміщення)
-            input.form-control(type="text", name="toLocation")
+    function updateToWarehouses() {
+        const selectedFrom = fromSelect.value;
+        for (let option of toSelect.options) {
+            if (option.value === "" || option.value !== selectedFrom) {
+                option.hidden = false;
+            } else {
+                option.hidden = true;
+                if (toSelect.value === selectedFrom) {
+                    toSelect.value = "";
+                }
+            }
+        }
+    }
 
-        button(type="submit" class="btn btn-primary") Виконати операцію
+    fromSelect.addEventListener('change', updateToWarehouses);
+    window.addEventListener('DOMContentLoaded', updateToWarehouses);

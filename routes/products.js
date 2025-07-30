@@ -13,12 +13,27 @@ export default function () {
             const warehouseProducts = await WarehouseProduct.find()
                 .populate('productId')
                 .populate('warehouseId');
-            const grouped = warehouseProducts.map((item) => ({
-                product: item.productId,
-                warehouse: item.warehouseId,
-                quantity: item.quantity
-            }));
-            res.render('products/products', {groupedProducts: grouped});
+            const grouped = {};
+            for (const wp of warehouseProducts) {
+                const productId = wp.productId._id;
+                if (!grouped[productId]) {
+                    grouped[productId] = {
+                        warehouseProductsId: wp._id,
+                        product: wp.productId,
+                        warehouses: [],
+                        totalQuantity: 0
+                    }
+                }
+                grouped[productId].warehouses.push({
+                    name: wp.warehouseId.name,
+                    quantity: wp.quantity,
+                })
+            }
+            const groupedProducts = Object.values(grouped);
+            for (const item of groupedProducts) {
+                item.totalQuantity = item.warehouses.reduce((sum, wh) => sum + wh.quantity, 0);
+            }
+            res.render('products/products', {groupedProducts});
         } catch (err) {
             console.error(err);
             res.status(500).render('products/products', {
@@ -36,7 +51,8 @@ export default function () {
     router.post('/', requireRole([EUserRoles.ADMIN]), async (req, res) => {
         const {
             name, sku, category, price, status,
-            warehouseId, initialQuantity
+            warehouseId, initialQuantity,
+            lowStockThreshold
         } = req.body;
         const product = await Product.create({
             name,
@@ -44,7 +60,8 @@ export default function () {
             category,
             price,
             warehouseId,
-            status
+            status,
+            lowStockThreshold
         });
 
         await WarehouseProduct.create({
@@ -57,9 +74,12 @@ export default function () {
     });
 
     router.get('/:id', requireRole([EUserRoles.ADMIN, EUserRoles.MANAGER, EUserRoles.STAFF]), async (req, res) => {
-        const product = await Product.findById(req.params.id);
-        if (!product) return res.status(404).send('Product not found');
-        res.render('products/product', {product});
+        const warehouseProduct = await WarehouseProduct.findById(req.params.id)
+            .populate('productId')
+            .populate('warehouseId');
+        console.log(warehouseProduct)
+        if (!warehouseProduct) return res.status(404).send('Product not found!');
+        res.render('products/product', {warehouseProduct: warehouseProduct});
     });
 
     router.get('/:id/edit', requireRole([EUserRoles.ADMIN, EUserRoles.MANAGER]), async (req, res) => {
@@ -82,6 +102,7 @@ export default function () {
             product.quantity = req.body.quantity;
             product.location = req.body.location;
             product.status = req.body.status;
+            product.lowStockThreshold = req.body.lowStockThreshold;
 
             await product.save();
             res.redirect('/products');
@@ -99,8 +120,16 @@ export default function () {
     });
 
     router.post('/:id/delete', requireRole([EUserRoles.ADMIN]), async (req, res) => {
-        await Product.findByIdAndDelete(req.params.id);
-        res.redirect('/products');
+        const productId = req.params.id;
+
+        try {
+            const deletedProduct = await Product.findByIdAndDelete(productId);
+            await WarehouseProduct.deleteMany({productId: deletedProduct.id});
+            res.redirect('/products');
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Помилка при видаленні продукту');
+        }
     });
     return router;
 }

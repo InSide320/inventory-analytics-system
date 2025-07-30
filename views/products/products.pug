@@ -21,13 +21,17 @@ include ../header
             each products in groupedProducts
                 tr
                     td
-                        a(href=`/products/${products.product._id}`)= products.product.name
+                        a(href=`/products/${products.warehouseProductsId}`)= products.product.name
                     td= products.product.sku
                     td= products.quantity
                     td= products.product.price.toFixed(2)
                     td= products.product.category
                     td= products.product.status
-                    td= products.warehouse.name
+                    td
+                        each warehouse in products.warehouses
+                            if(warehouse.quantity !== 0)
+                                p #{warehouse.name}: #{warehouse.quantity}
+                        p=products.totalQuantity !== 0 ? "Sum: " + products.totalQuantity : ""
                     if(role && role === 'admin' || role === 'manager')
                         td(style="display:flex; gap: 10px; align-items: center;")
                             a.btn.btn-primary(href=`/products/${products.product._id}/edit`) Edit

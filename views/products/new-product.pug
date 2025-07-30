@@ -2,6 +2,8 @@ include ../header
 
 .container
     h1= product ? "Edit Product" : "Add new product"
+    if error
+        p(style="color:red")= error
     div
         form.d-flex.flex-column.align-items-start(method="POST", action=product ? `/products/${product._id}` : "/products")
             if product

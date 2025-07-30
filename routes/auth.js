@@ -79,7 +79,6 @@ export default function () {
             return res.render('auth/forgot-password', {error: 'Користувача з таким email не знайдено'});
         }
 
-
         const token = crypto.randomBytes(32).toString('hex');
         const expires = Date.now() + 1000 * 60 * 30;
 
