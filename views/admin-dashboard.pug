@@ -6,6 +6,8 @@ include header
     h2 Dashboard
     div(style="display: flex; gap: 10px;")
         a.btn.btn-primary(href="/warehouses") Manage warehouses
+    if error
+        p(style="color: red; font-weight: bold")= error
     div
         table.table.table-striped.table-bordered.mt-4
             tr

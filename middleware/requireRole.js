@@ -1,3 +1,5 @@
+import {accessDenied} from "../controllers/errorController.js";
+
 export default function requireRole(roles) {
     return (req, res, next) => {
         if (!req.session?.email) {
@@ -7,7 +9,8 @@ export default function requireRole(roles) {
         const allowedRoles = Array.isArray(roles) ? roles : [roles];
 
         if (!allowedRoles.includes(req.session.role)) {
-            return res.status(403).render('403');
+            accessDenied(req, res);
+            return;
         }
 
         next();
