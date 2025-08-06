@@ -11,7 +11,6 @@ export const getInventoryOperations = async (req, res) => {
             .populate('productId')
             .populate('warehouseId');
         const product = warehouseProducts[0];
-        console.log(product)
         if (!warehouseProducts || warehouseProducts.length === 0) {
             return res.status(404).send("Продукт не знайдено на жодному складі");
         }

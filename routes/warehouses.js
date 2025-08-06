@@ -1,14 +1,15 @@
 import express from "express";
-import Warehouse from "../models/warehouseSchema.js";
 import requireRole from "../middleware/requireRole.js";
 import {EUserRoles} from "../enum/EUserRoles.js";
 import {
-    renderNewWarehousePage,
-    renderWarehousesListPage,
     createWarehouse,
-    renderWarehouseById, renderEditWarehouse, updateWarehouse, deleteWarehouse
+    deleteWarehouse,
+    renderEditWarehouse,
+    renderNewWarehousePage,
+    renderWarehouseById,
+    renderWarehousesListPage,
+    updateWarehouse
 } from "../controllers/warehouseController.js";
-import {deleteProduct} from "../controllers/productController.js";
 
 const router = express.Router();
 
